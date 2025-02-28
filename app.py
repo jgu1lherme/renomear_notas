@@ -49,7 +49,6 @@ def main():
     root = tk.Tk()
     root.withdraw()
 
-    # Seleciona arquivos PDF específicos
     pdf_files = filedialog.askopenfilenames(
         title="Selecione os PDFs para renomear", filetypes=[("Arquivos PDF", "*.pdf")]
     )
@@ -65,7 +64,6 @@ def main():
         print("Nenhuma pasta de destino selecionada.")
         return
 
-    # CHAMANDO A FUNÇÃO CORRETA
     process_selected_pdfs(pdf_files, output_folder)
     print("Processo concluído!")
 
