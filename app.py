@@ -28,34 +28,34 @@ def extract_info_from_pdf(pdf_path):
     return None
 
 
-def process_pdfs(input_folder, output_folder):
+def process_selected_pdfs(pdf_files, output_folder):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-    for filename in os.listdir(input_folder):
-        if filename.lower().endswith(".pdf"):
-            pdf_path = os.path.join(input_folder, filename)
-            new_name = extract_info_from_pdf(pdf_path)
+    for pdf_path in pdf_files:
+        new_name = extract_info_from_pdf(pdf_path)
 
-            if new_name:
-                new_path = os.path.join(output_folder, new_name)
+        if new_name:
+            new_path = os.path.join(output_folder, new_name)
 
-                if os.path.abspath(pdf_path) != os.path.abspath(new_path):
-                    shutil.copy(pdf_path, new_path)
-                    print(f"Renomeado: {filename} -> {new_name}")
-                else:
-                    print(
-                        f"O arquivo '{new_name}' já está no destino e não foi copiado."
-                    )
+            if os.path.abspath(pdf_path) != os.path.abspath(new_path):
+                shutil.copy(pdf_path, new_path)
+                print(f"Renomeado: {os.path.basename(pdf_path)} -> {new_name}")
+            else:
+                print(f"O arquivo '{new_name}' já está no destino e não foi copiado.")
 
 
 def main():
     root = tk.Tk()
     root.withdraw()
 
-    input_folder = filedialog.askdirectory(title="Selecione a pasta com os PDFs")
-    if not input_folder:
-        print("Nenhuma pasta selecionada.")
+    # Seleciona arquivos PDF específicos
+    pdf_files = filedialog.askopenfilenames(
+        title="Selecione os PDFs para renomear", filetypes=[("Arquivos PDF", "*.pdf")]
+    )
+
+    if not pdf_files:
+        print("Nenhum arquivo selecionado.")
         return
 
     output_folder = filedialog.askdirectory(
@@ -65,7 +65,8 @@ def main():
         print("Nenhuma pasta de destino selecionada.")
         return
 
-    process_pdfs(input_folder, output_folder)
+    # CHAMANDO A FUNÇÃO CORRETA
+    process_selected_pdfs(pdf_files, output_folder)
     print("Processo concluído!")
 
 
